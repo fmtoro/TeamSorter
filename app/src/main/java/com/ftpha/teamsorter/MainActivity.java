@@ -90,21 +90,12 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setIcon(R.drawable.ic_launcher);
 
         tNames = new String[]{
-                "NIU",
                 "Team 1",
-                "Team 2",
-                "Team 3",
-                "Team 4",
-                "Team 5",
-                "Team 6",
-                "Team 7",
-                "Team 8",
-                "Team 9",
-                "Team 10"
+                "Team 2"
         };
 
         ListAdapter theAdapter= new ArrayAdapter<String>(this,
-                R.layout.row_layout,
+                android.R.layout.simple_list_item_1,
                 tNames);
         ListView theListView = (ListView) findViewById(R.id.ftListView);
 
@@ -114,7 +105,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String teamSelected = "You clicked " +
-                                String.valueOf(parent.getItemAtPosition(position));
+                        String.valueOf(parent.getItemAtPosition(position));
                 Toast.makeText(MainActivity.this, teamSelected, Toast.LENGTH_SHORT).show();
                 //parent.getItemAtPosition(0).
             }
