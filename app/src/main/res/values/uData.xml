@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="modes_array">
+        <item>Simple</item>
+        <item>Standard</item>
+        <item>Pro</item>
+        <item>Pro +</item>
+    </string-array>
+</resources>

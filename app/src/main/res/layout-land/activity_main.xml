@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tlid2"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:id="@+id/sl1id2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="25dp">
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Interface"
+            android:textOff="Simple"
+            android:textOn="Advanced"
+            android:layout_marginLeft="40dp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/sl2id2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingLeft="15dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/textPeopleToSort"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="People to Sort"
+            android:textSize="20sp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/noOfPeeps"
+            android:layout_toStartOf="@+id/noOfPeeps"
+            android:layout_marginRight="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_weight="0.06" />
+
+        <EditText
+            android:id="@+id/noOfPeeps"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:text="6"
+            android:singleLine="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/noOfTeams"
+            android:layout_toStartOf="@+id/noOfTeams" />
+
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/tl3id2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingLeft="15dp"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/textNoOfTeams"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Number of Teams"
+            android:textSize="20sp"
+            android:layout_above="@+id/noOfPeeps"
+            android:layout_alignRight="@+id/textPeopleToSort"
+            android:layout_alignEnd="@+id/textPeopleToSort" />
+
+        <EditText
+            android:id="@+id/noOfTeams"
+            android:layout_width="111dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:text="2"
+            android:layout_alignBottom="@+id/textNoOfTeams"
+            android:layout_alignRight="@+id/textView"
+            android:layout_alignEnd="@+id/textView"
+            android:layout_weight="0.05"
+            android:layout_marginLeft="10dp" />
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnSort"
+        android:layout_width="125dp"
+        android:layout_height="wrap_content"
+        android:text="Sort"
+        android:layout_gravity="right"
+        android:onClick="OnClickSort"
+        android:layout_marginBottom="37dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView"
+        android:layout_marginRight="35dp" />
+
+</LinearLayout>
