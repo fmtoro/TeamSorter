@@ -100,10 +100,12 @@
         android:textSize="@dimen/abc_text_size_large_material" />
 
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/ftListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" >
+        android:layout_gravity="center_horizontal"
+
+        >
 
     </ListView>
 
