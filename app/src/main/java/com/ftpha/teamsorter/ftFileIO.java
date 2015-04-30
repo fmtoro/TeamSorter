@@ -2,6 +2,7 @@ package com.ftpha.teamsorter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,6 +11,7 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -20,45 +22,45 @@ import java.io.IOException;
  */
 public class ftFileIO {
 
-    public static final String fileN = "srtData";
+    private static final String fileN = "srtData.json";
     private static final int MODE_PRIVATE = 1;
 
+public static String fileName(){
+    return fileN;
+}
 
-    public static String[] readD(Activity a) {
+    public static String[] readD(Activity a, int nOfT) throws IOException, JSONException {
 
-        try {
-            FileInputStream fis = a.openFileInput(fileN);
-            BufferedInputStream bis = new BufferedInputStream(fis);
+        FileInputStream fis = a.openFileInput(fileN);
+        BufferedInputStream bis = new BufferedInputStream(fis);
 
-            StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuilder = new StringBuilder();
 
-            while (bis.available() != 0) {
-                char c = (char)bis.read();
-                stringBuffer.append(c);
-            }
-            bis.close();
-            fis.close();
-
-            JSONArray data = new JSONArray(stringBuffer.toString());
-
-
-            String[] iArr = new String[data.length()];
-            for (int i = 0; i < data.length(); i++) {
-                iArr[i] = data.getJSONObject(i).getString("Nombre");
-           }
-
-            return iArr;
-
-        } catch (IOException e) {
-            return  null;
-        } catch (JSONException e) {
-            return  null;
+        while (bis.available() != 0) {
+            char c = (char) bis.read();
+            stringBuilder.append(c);
         }
+        bis.close();
+        fis.close();
+
+
+
+        JSONArray data = new JSONArray(stringBuilder.toString());
+        String[] iArr = new String[nOfT];
+        for (int i = 0; i < nOfT; i++) {
+            if (i >= data.length()) {
+                iArr[i] = "Team " + (i + 1);
+            } else {
+                iArr[i] = data.getJSONObject(i).getString("Nombre");
+            }
+        }
+
+        return iArr;
 
     }
 
 
-    public static int writeD(Activity a, String[] dataToSave) {
+    public static int writeD(Activity a, String[] dataToSave) throws JSONException, IOException {
 //
 //        if it saves OK returns 1 else 0
 //
@@ -66,15 +68,14 @@ public class ftFileIO {
 //
 
         File f = a.getFilesDir();
-        String path = f.getAbsolutePath();
+        //String path = f.getAbsolutePath();
 
         JSONArray data = new JSONArray();
         JSONObject team;
 
-        team = new JSONObject();
 
-        try {
-            for (int i = 0; 1 < dataToSave.length; i++) {
+            for (int i = 0; i < dataToSave.length; i++) {
+                team = new JSONObject();
                 team.put("Nombre", dataToSave[i]);
                 team.put("Imagen", "N/A");
                 data.put(team);
@@ -88,13 +89,6 @@ public class ftFileIO {
             fos.close();
 
             return 1;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return 0;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 0;
-        }
 
     }
 }

@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,11 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.IOException;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -37,6 +43,15 @@ public class MainActivity extends ActionBarActivity {
         oS.putInt("ftNoOfPeople", ftNoOfPeople);
         oS.putInt("ftNoOfTeams", ftNoOfTeams);
 
+
+        try {
+            ftFileIO.writeD(MainActivity.this,tNames);
+        } catch (JSONException e) {
+            Log.i("*========ft --   ", "JSON Error");
+            //e.printStackTrace();
+        } catch (IOException e) {
+            Log.i("*========ft --   ", "IO Error");
+        }
     }
 
     @Override
@@ -65,7 +80,14 @@ public class MainActivity extends ActionBarActivity {
 
         // Commit the edits!
         editor.commit();
-
+        try {
+            ftFileIO.writeD(MainActivity.this,tNames);
+        } catch (JSONException e) {
+            Log.i("*========ft --   ", "JSON Error");
+            //e.printStackTrace();
+        } catch (IOException e) {
+            Log.i("*========ft --   ", "IO Error");
+        }
     }
 
     @Override
@@ -89,31 +111,9 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_launcher);
 
-        tNames = new String[]{
-                "Team 1",
-                "Team 2"
-        };
-
-        ListAdapter theAdapter= new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                tNames);
-        ListView theListView = (ListView) findViewById(R.id.ftListView);
-
-        theListView.setAdapter(theAdapter);
-
-        theListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String teamSelected = "You clicked " +
-                        String.valueOf(parent.getItemAtPosition(position));
-                Toast.makeText(MainActivity.this, teamSelected, Toast.LENGTH_SHORT).show();
-                //parent.getItemAtPosition(0).
-            }
-        });
 
         noPeepsTxt = (EditText) findViewById(R.id.noOfPeeps);
         TeamsEditTxt = (EditText) findViewById(R.id.noOfTeams);
-
         noPeepsTxt.addTextChangedListener(new TextWatcher() {
 
 
@@ -153,20 +153,70 @@ public class MainActivity extends ActionBarActivity {
                     ftNoOfTeams = 0;
                 } else {
                     ftNoOfTeams = Integer.parseInt(String.valueOf(s));
+                    try {
+                        ftFileIO.writeD(MainActivity.this,tNames);
+                    } catch (JSONException e) {
+                        Log.i("*========ft --   ", "JSON Error");
+                        //e.printStackTrace();
+                    } catch (IOException e) {
+                        Log.i("*========ft --   ", "IO Error");
+                    }
                 }
+                populateList();
             }
         });
 
 
-     /*   Spinner spinner = (Spinner) findViewById(R.id.mode_spinner);
-// Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.modes_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-*/
+        File file = this.getFileStreamPath(ftFileIO.fileName());
+        boolean itsThere = file.exists();
+        if(! itsThere) {
+            populateArr();
+        }
+
+        populateList();
+
+
+    }
+
+    private void populateArr() {
+        tNames = new String[ftNoOfTeams];
+        for (int i = 0; i < ftNoOfTeams; i++ ) {
+            tNames[i] = getString( R.string.team ) + (i+1);
+        }
+
+        try {
+            ftFileIO.writeD(MainActivity.this,tNames);
+        } catch (JSONException e) {
+            Log.i("*========ft --   ", "JSON Error");
+            //e.printStackTrace();
+        } catch (IOException e) {
+            Log.i("*========ft --   ", "IO Error");
+        }
+    }
+
+    private void populateList() {
+        try {
+            tNames = ftFileIO.readD(this, ftNoOfTeams);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ListAdapter lA = new ArrayAdapter<String>(this, R.layout.ft_row_layout, R.id.textView1 , tNames);
+
+        ListView lV = (ListView) findViewById(R.id.ftListView);
+        lV.setAdapter(lA);
+
+        lV.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String ftTms = parent.getItemAtPosition(position).toString();
+                        ftTms += " Clicked";
+                        Toast.makeText(MainActivity.this, ftTms, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
     public void OnClickSort(View view){
